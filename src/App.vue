@@ -1,17 +1,35 @@
 <template>
   <div id="app">
-    <myheader></myheader>
-    <router-view/>
+    <flashMsg :msg="msg" v-if="show"></flashMsg>
+    <myheader @flash="emitEvent"></myheader>
+    <router-view @flash="emitEvent"/>
   </div>
 </template>
 
 <script>
 import myheader from './components/myheader'
+import flashMsg from './components/flashMsg'
 
 export default {
   name: 'App',
   components: {
-    myheader
+    myheader,
+    flashMsg
+  },
+  data () {
+    return {
+      msg: '',
+      show: false
+    }
+  },
+  methods: {
+    emitEvent (msg) {
+      this.msg = msg
+      this.show = true
+      setTimeout(() => {
+        this.show = false }
+        , 3000)
+    }
   }
 }
 </script>

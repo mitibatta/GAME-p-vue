@@ -4,26 +4,54 @@
         <router-link to="/">
           <img class="logo" src="../assets/image/logo.png" alt="ロゴ画像">
         </router-link>
-      <!-- <% if logged_in? %> -->
+      <div v-if="logged_in">
+         <li><a href="#">投稿一覧</a></li>
+         <li><a href="#">いいね一覧</a></li>
+         <li><a href="#">投稿する</a></li>
+         <li><a href="#" @click="signout">サインアウト</a></li>
+      </div>
+      <div v-else>
       <ul class="nav-item">
         <li><a href="#">投稿一覧</a></li>
         <li><router-link to="/user/new">アカウント作成</router-link></li>
-        <li><a href="#">ログイン</a></li>
+        <li><router-link to="/session/new">ログイン</router-link></li>
       </ul>
-      <!-- <% else %> -->
-        <!-- <ul class="nav-item">
-          <li><%= link_to "投稿を見る", posts_path %></li>
-          <li><%= link_to "アカウント作成", new_user_path %></li>
-          <li><%= link_to "ログイン", login_path %></li>
-        </ul> -->
-        <!-- <% end %> -->
+      </div>
     </nav>
 </div>
 </template>
 
 <script>
+import axios from 'axios'
+
+const hostName = 'localhost:3000'
+const path = '/api/sessions'
+const id = this.logged_in
+
 export default {
-  name: 'MyHeader'
+  name: 'MyHeader',
+  data () {
+    return {
+      logged_in: 0,
+      msg: ''
+    }
+  },
+  created: function () {
+    this.logged_in = this.$localStorage.get('loginUser')
+  },
+  methods: {
+    signout () {
+      axios.delete(`http://${hostName}${path}/${id}`).then((result) => {
+        this.$router.push('/')
+        this.$emit('flash', (this.msg = result.statusText))
+        this.$localStorage.remove('loginUser')
+        this.logged_in = 0
+      }).catch(function (result) {
+        this.$emit('flash', (this.msg = result.statusText))
+      })
+    }
+  }
+
 }
 </script>
 

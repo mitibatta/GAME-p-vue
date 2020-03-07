@@ -42,20 +42,22 @@ export default {
       name: '',
       email: '',
       password: '',
-      password_confirmation: ''
+      password_confirmation: '',
+      msg: ''
     }
   },
   methods: {
-    userCreate() {
-      api.post(`http://${hostName}${path}`, {
+    userCreate () {
+      axios.post(`http://${hostName}${path}`, {
         name: this.name,
         email: this.email,
         password: this.password,
         password_confirmation: this.password_confirmation
-      }).then(result => {
+      }).then((result) => {
         this.$router.push('/')
-      }).catch(function (error) {
-        console.log(error)
+        this.$emit('flash', (this.msg = result.statusText))
+      }).catch(function (result) {
+        this.$emit('flash', (this.msg = result.statusText))
       })
     }
   }
@@ -77,12 +79,6 @@ export default {
   }
   .form-group{
     margin-bottom:20px;
-
-    .hidden-text{
-  color:#555;
-  font-size:12px;
-  margin-top:20px;
-  }
 
   }
   .btn-block{
