@@ -26,8 +26,7 @@ export default {
     emitEvent (msg) {
       this.msg = msg
       this.show = true
-      setTimeout(() => {
-        this.show = false }
+      setTimeout(() => { this.show = false }
         , 3000)
     }
   }

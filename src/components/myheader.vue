@@ -4,11 +4,13 @@
         <router-link to="/">
           <img class="logo" src="../assets/image/logo.png" alt="ロゴ画像">
         </router-link>
-      <div v-if="logged_in">
+      <div v-if="logged_in > 0">
+        <ul class="nav-item">
          <li><a href="#">投稿一覧</a></li>
          <li><a href="#">いいね一覧</a></li>
          <li><a href="#">投稿する</a></li>
          <li><a href="#" @click="signout">サインアウト</a></li>
+         </ul>
       </div>
       <div v-else>
       <ul class="nav-item">
