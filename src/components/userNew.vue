@@ -43,7 +43,9 @@ export default {
       email: '',
       password: '',
       password_confirmation: '',
-      msg: ''
+      res: {
+        msg: ''
+      }
     }
   },
   methods: {
@@ -55,9 +57,11 @@ export default {
         password_confirmation: this.password_confirmation
       }).then((result) => {
         this.$router.push('/')
-        this.$emit('flash', (this.msg = result.statusText))
+        this.res = result.data
+        this.$emit('flash', (this.res.msg))
       }).catch(function (result) {
-        this.$emit('flash', (this.msg = result.statusText))
+        this.res = result.data
+        this.$emit('flash', (this.res.msg))
       })
     }
   }

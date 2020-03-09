@@ -33,8 +33,10 @@ export default {
     return {
       email: '',
       password: '',
-      msg: '',
-      userId: 0
+      res: {
+        msg: '',
+        userId: 0
+      }
     }
   },
   localStorage: {
@@ -50,11 +52,12 @@ export default {
         password: this.password
       }).then((result) => {
         this.$router.push('/')
-        this.$emit('flash', (this.msg = result.statusText))
-        this.userId = result.data
-        this.$localStorage.set('loginUser', this.userId)
+        this.res = result.data
+        this.$emit('flash', (this.res.msg))
+        this.$localStorage.set('loginUser', this.res.userId)
       }).catch(function (result) {
-        this.$emit('flash', (this.msg = result.statusText))
+        this.res.msg = result.data
+        this.$emit('flash', (this.res.msg))
       })
     }
   }
