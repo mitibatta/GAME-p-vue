@@ -7,7 +7,7 @@
         <form @submit.prevent="userCreate">
         <div class="form-group">
           <label for="name">名前</label>
-          <input type="text" id="name" class="form-control" v-model="name">
+          <input type="text" id="name" class="form-control" v-model='name'>
         </div>
         <div class="form-group">
           <label for="email">メールアドレス</label>
@@ -37,7 +37,7 @@ const path = '/api/users'
 
 export default {
   name: 'userNew',
-  data () {
+  data: function () {
     return {
       name: '',
       email: '',
@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     userCreate () {
+      // console.log(this.password)
       axios.post(`http://${hostName}${path}`, {
         name: this.name,
         email: this.email,
@@ -60,6 +61,7 @@ export default {
         this.res = result.data
         this.$emit('flash', (this.res.msg))
       }).catch(function (result) {
+        this.$router.push('/user/new')
         this.res = result.data
         this.$emit('flash', (this.res.msg))
       })
