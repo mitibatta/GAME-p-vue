@@ -62,19 +62,26 @@ export default {
     },
     createPost () {
       console.log(this.text)
-      let formdata = new FormData()
-      formdata.append('image', this.uploadImage)
-      formdata.append('video', this.uploadVideo)
-      formdata.append('text', this.text)
-      console.log()
-      // let config = {
-      //   headders: {
-      //     'content-type': 'multipart/form-data'
-      //   }
-      // }
+      
+      let formdata1 = new FormData()
+      formdata1.append('image', this.uploadImage)
+      let formdata2 = new FormData()
+      formdata2.append('video', this.uploadVideo)
+      console.log(formdata1.get('image'))
+      let config = {
+        headders: {
+          'content-type': 'multipart/form-data'
+        }
+      }
       axios.post(`http://${hostName}${path}`, {
-        formdata
-      }).then((result) => {
+        text: this.text,
+        user_id: this.logged_in,
+        pictures_attributes: [
+          {image: formdata1,
+            video: formdata2,
+            user_id: this.logged_in}
+        ]
+      }, config).then((result) => {
         this.$router.push('/')
         this.res = result.data
         this.$emit('flash', (this.res.message))
