@@ -17,6 +17,10 @@ export default {
   width:100%;
   height: 75px;
   text-align: center;
+  position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 3000;
 }
 
 p{

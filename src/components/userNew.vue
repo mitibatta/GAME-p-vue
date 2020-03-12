@@ -18,6 +18,7 @@
           <input type="password" id="password" class="form-control" v-model="password">
         </div>
         <div class="form-group">
+          <p v-show="error">パスワードは同じ値を入力してください</p>
           <label for="password_confirmation">パスワード再入力</label>
           <input type="password" id="password_confirmation" class="form-control" v-model="password_confirmation">
         </div>
@@ -43,28 +44,33 @@ export default {
       email: '',
       password: '',
       password_confirmation: '',
+      error: false,
       res: {
-        msg: ''
+        message: ''
       }
     }
   },
   methods: {
     userCreate () {
-      // console.log(this.password)
-      axios.post(`http://${hostName}${path}`, {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        password_confirmation: this.password_confirmation
-      }).then((result) => {
-        this.$router.push('/')
-        this.res = result.data
-        this.$emit('flash', (this.res.msg))
-      }).catch(function (result) {
-        this.$router.push('/user/new')
-        this.res = result.data
-        this.$emit('flash', (this.res.msg))
-      })
+      if (this.password === this.password_confirmation) {
+        axios.post(`http://${hostName}${path}`, {
+          name: this.name,
+          email: this.email,
+          password_digest: this.password
+        }).then((result) => {
+          console.log(result.data)
+          this.$router.push('/')
+          this.res = result.data
+          this.$emit('flash', (this.res.message))
+        }).catch(function (res) {
+          console.log(res.data)
+          this.$router.push('/user/new')
+          this.res = res.data
+          this.$emit('flash', (this.res.message))
+        })
+      } else {
+        this.error = true
+      }
     }
   }
 }
@@ -85,6 +91,10 @@ export default {
   }
   .form-group{
     margin-bottom:20px;
+    p{
+      font-size:12px;
+      color:red;
+    }
 
   }
   .btn-block{

@@ -34,7 +34,7 @@ export default {
       email: '',
       password: '',
       res: {
-        msg: '',
+        message: '',
         userId: 0
       }
     }
@@ -49,11 +49,11 @@ export default {
     login () {
       axios.post(`http://${hostName}${path}`, {
         email: this.email,
-        password: this.password
+        password_digest: this.password
       }).then((result) => {
         this.$router.push('/')
         this.res = result.data
-        this.$emit('flash', (this.res.msg))
+        this.$emit('flash', (this.res.message))
         this.$localStorage.set('loginUser', this.res.userId)
       }).catch(function (result) {
         this.res.msg = result.data

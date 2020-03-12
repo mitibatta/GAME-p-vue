@@ -8,7 +8,7 @@
         <ul class="nav-item">
          <li><a href="#">投稿一覧</a></li>
          <li><a href="#">いいね一覧</a></li>
-         <li><a href="#">投稿する</a></li>
+          <li><router-link to="/post/new">投稿する</router-link></li>
          <li><a href="#" @click="signout">サインアウト</a></li>
          </ul>
       </div>
@@ -35,17 +35,20 @@ export default {
   data () {
     return {
       logged_in: 0,
-      msg: ''
+      res: {
+        message: ''
+      }
     }
   },
-  created: function () {
+  mounted: function () {
     this.logged_in = this.$localStorage.get('loginUser')
   },
   methods: {
     signout () {
       axios.delete(`http://${hostName}${path}/${id}`).then((result) => {
         this.$router.push('/')
-        this.$emit('flash', (this.msg = result.statusText))
+        this.res = result.data
+        this.$emit('flash', (this.res.message))
         this.$localStorage.remove('loginUser')
         this.logged_in = 0
       }).catch(function (result) {
