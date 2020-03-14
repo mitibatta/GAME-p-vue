@@ -61,26 +61,35 @@ export default {
       console.log(this.uploadVideo)
     },
     createPost () {
-      console.log(this.text)
-      
-      let formdata1 = new FormData()
-      formdata1.append('image', this.uploadImage)
-      let formdata2 = new FormData()
-      formdata2.append('video', this.uploadVideo)
-      console.log(formdata1.get('image'))
-      let config = {
+      var formdata = new FormData()
+      formdata.append('image', this.uploadImage)
+      formdata.append('video', this.uploadVideo)
+      formdata.append('user_id', this.logged_in)
+      formdata.append('text', this.text)
+      const data = {
+        text: formdata.get('text'),
+        user_id: formdata.get('user_id'),
+        image: formdata.get('image'),
+        video: formdata.get('video')
+      }
+      console.log(data)
+      // console.log(formdata.get('image'))
+      // console.log(formdata.get('video'))
+      // let formdata1 = new FormData()
+      // formdata1.append('image', this.uploadImage)
+      // let formdata2 = new FormData()
+      // formdata2.append('video', this.uploadVideo)
+      // console.log(formdata1.get('image'))
+      var config = {
         headders: {
           'content-type': 'multipart/form-data'
         }
       }
       axios.post(`http://${hostName}${path}`, {
-        text: this.text,
-        user_id: this.logged_in,
-        pictures_attributes: [
-          {image: formdata1,
-            video: formdata2,
-            user_id: this.logged_in}
-        ]
+        text: formdata.get('text'),
+        user_id: formdata.get('user_id'),
+        image: formdata.get('image'),
+        video: formdata.get('video')
       }, config).then((result) => {
         this.$router.push('/')
         this.res = result.data
