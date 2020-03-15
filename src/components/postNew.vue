@@ -66,13 +66,13 @@ export default {
       formdata.append('video', this.uploadVideo)
       formdata.append('user_id', this.logged_in)
       formdata.append('text', this.text)
-      const data = {
-        text: formdata.get('text'),
-        user_id: formdata.get('user_id'),
-        image: formdata.get('image'),
-        video: formdata.get('video')
-      }
-      console.log(data)
+      // const data = {
+      //   text: formdata.get('text'),
+      //   user_id: formdata.get('user_id'),
+      //   image: formdata.get('image'),
+      //   video: formdata.get('video')
+      // }
+      console.log(formdata)
       // console.log(formdata.get('image'))
       // console.log(formdata.get('video'))
       // let formdata1 = new FormData()
@@ -86,10 +86,7 @@ export default {
         }
       }
       axios.post(`http://${hostName}${path}`, {
-        text: formdata.get('text'),
-        user_id: formdata.get('user_id'),
-        image: formdata.get('image'),
-        video: formdata.get('video')
+        formdata
       }, config).then((result) => {
         this.$router.push('/')
         this.res = result.data

@@ -28,7 +28,7 @@ import axios from 'axios'
 
 const hostName = 'localhost:3000'
 const path = '/api/sessions'
-const id = this.logged_in
+// const id = this.logged_in
 
 export default {
   name: 'MyHeader',
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     signout () {
-      axios.delete(`http://${hostName}${path}/${id}`).then((result) => {
+      axios.delete(`http://${hostName}${path}/${this.logged_in}`).then((result) => {
         this.$router.push('/')
         this.res = result.data
         this.$emit('flash', (this.res.message))
