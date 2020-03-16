@@ -4,6 +4,7 @@
     <div class="row">
       <div class="col-md-offset-4 col-md-4 form_box">
         <h1>投稿する</h1>
+        <p v-show="errored">投稿に失敗しました。</p>
       <form @submit.prevent="createPost">
         <div class="form-group">
           <label for="image">画像</label>
@@ -39,6 +40,7 @@ export default {
       uploadVideo: null,
       text: '',
       logged_in: 0,
+      errored: false,
       res: {
         message: ''
       }
@@ -85,16 +87,14 @@ export default {
           'content-type': 'multipart/form-data'
         }
       }
-      axios.post(`http://${hostName}${path}`, {
-        formdata
-      }, config).then((result) => {
+      axios.post(`http://${hostName}${path}`,
+        formdata, config).then((result) => {
         this.$router.push('/')
         this.res = result.data
         this.$emit('flash', (this.res.message))
-      }).catch((result) => {
-        this.$router.push('/post/new')
-        this.res = result.data
-        this.$emit('flash', (this.res.message))
+      }).catch(error => {
+        console.log(error)
+        this.errored = true
       })
     }
   }
@@ -109,6 +109,11 @@ export default {
 .form_box{
   margin-top:150px;
   margin-left:350px;
+
+   p{
+      font-size:12px;
+      color:red;
+    }
 
   .form-control{
     height:35px;

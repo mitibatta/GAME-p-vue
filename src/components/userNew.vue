@@ -4,6 +4,7 @@
     <div class="row">
       <div class="col-md-offset-4 col-md-4 form_box">
         <h1>アカウント作成</h1>
+        <p v-show="errored">アカウント作成に失敗しました。</p>
         <form @submit.prevent="userCreate">
         <div class="form-group">
           <label for="name">名前</label>
@@ -18,7 +19,7 @@
           <input type="password" id="password" class="form-control" v-model="password">
         </div>
         <div class="form-group">
-          <p v-show="error">パスワードは同じ値を入力してください</p>
+          <p v-show="pass">パスワードは同じ値を入力してください</p>
           <label for="password_confirmation">パスワード再入力</label>
           <input type="password" id="password_confirmation" class="form-control" v-model="password_confirmation">
         </div>
@@ -44,7 +45,8 @@ export default {
       email: '',
       password: '',
       password_confirmation: '',
-      error: false,
+      pass: false,
+      errored: false,
       res: {
         message: ''
       }
@@ -62,14 +64,12 @@ export default {
           this.$router.push('/')
           this.res = result.data
           this.$emit('flash', (this.res.message))
-        }).catch(function (res) {
-          console.log(res.data)
-          this.$router.push('/user/new')
-          this.res = res.data
-          this.$emit('flash', (this.res.message))
+        }).catch(error => {
+          console.log(error)
+          this.errored = true
         })
       } else {
-        this.error = true
+        this.pass = true
       }
     }
   }
@@ -86,15 +86,16 @@ export default {
   margin-top:150px;
   margin-left:350px;
 
+  p{
+      font-size:12px;
+      color:red;
+    }
+
   .form-control{
     height:35px;
   }
   .form-group{
     margin-bottom:20px;
-    p{
-      font-size:12px;
-      color:red;
-    }
 
   }
   .btn-block{

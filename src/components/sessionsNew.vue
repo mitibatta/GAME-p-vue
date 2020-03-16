@@ -4,6 +4,7 @@
     <div class="row">
       <div class="col-md-offset-4 col-md-4 form_box">
         <h1>サインイン</h1>
+        <p v-show="errored">メールアドレスかパスワードが間違っています。</p>
         <form @submit.prevent="login">
           <div class="form-group">
             <label for="email">メールアドレス</label>
@@ -33,6 +34,7 @@ export default {
     return {
       email: '',
       password: '',
+      errored: false,
       res: {
         message: '',
         userId: 0
@@ -55,9 +57,9 @@ export default {
         this.res = result.data
         this.$emit('flash', (this.res.message))
         this.$localStorage.set('loginUser', this.res.userId)
-      }).catch(function (result) {
-        this.res.msg = result.data
-        this.$emit('flash', (this.res.msg))
+      }).catch(error => {
+        console.log(error)
+        this.errored = true
       })
     }
   }
@@ -73,6 +75,11 @@ export default {
 .form_box{
   margin-top:150px;
   margin-left:350px;
+
+   p{
+      font-size:12px;
+      color:red;
+    }
 
   .form-control{
     height:35px;
