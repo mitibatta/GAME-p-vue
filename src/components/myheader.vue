@@ -42,6 +42,7 @@ export default {
   },
   mounted: function () {
     this.logged_in = this.$localStorage.get('loginUser')
+    console.log(this.logged_in)
   },
   methods: {
     signout () {
@@ -51,8 +52,8 @@ export default {
         this.$emit('flash', (this.res.message))
         this.$localStorage.remove('loginUser')
         this.logged_in = 0
-      }).catch(function (result) {
-        this.$emit('flash', (this.msg = result.statusText))
+      }).catch(error => {
+        console.log(error)
       })
     }
   }

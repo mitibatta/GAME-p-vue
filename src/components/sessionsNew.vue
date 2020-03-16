@@ -53,10 +53,10 @@ export default {
         email: this.email,
         password_digest: this.password
       }).then((result) => {
-        this.$router.push('/')
         this.res = result.data
         this.$emit('flash', (this.res.message))
         this.$localStorage.set('loginUser', this.res.userId)
+        this.$router.push('/')
       }).catch(error => {
         console.log(error)
         this.errored = true
