@@ -2,7 +2,7 @@
   <div class="user-new-wrapper">
   <div class="container">
     <div class="row">
-      <div class="col-md-offset-4 col-md-4 form_box">
+      <div class="form_box">
         <h1>アカウント作成</h1>
         <p v-show="errored">アカウント作成に失敗しました。</p>
         <form @submit.prevent="userCreate">
@@ -83,8 +83,7 @@ export default {
   height:780px;
 
 .form_box{
-  margin-top:150px;
-  margin-left:350px;
+  margin:150px auto 0 auto;
 
   p{
       font-size:12px;

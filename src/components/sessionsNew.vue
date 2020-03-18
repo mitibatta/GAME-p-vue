@@ -2,7 +2,7 @@
   <div class="user-new-wrapper">
   <div class="container">
     <div class="row">
-      <div class="col-md-offset-4 col-md-4 form_box">
+      <div class="form_box">
         <h1>サインイン</h1>
         <p v-show="errored">メールアドレスかパスワードが間違っています。</p>
         <form @submit.prevent="login">
@@ -56,7 +56,7 @@ export default {
         this.res = result.data
         this.$emit('flash', (this.res.message))
         this.$localStorage.set('loginUser', this.res.userId)
-        this.$router.push('/')
+        this.$router.push('/post/index')
       }).catch(error => {
         console.log(error)
         this.errored = true
@@ -73,9 +73,8 @@ export default {
   height:780px;
 
 .form_box{
-  margin-top:150px;
-  margin-left:350px;
-
+  margin:150px auto 0 auto;
+  width: 280px;
    p{
       font-size:12px;
       color:red;
@@ -90,7 +89,7 @@ export default {
   }
   .btn-block{
     height:35px;
-    margin-top:50px;
+    margin-top:60px;
   }
   h1{
     margin-bottom:45px;

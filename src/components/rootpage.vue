@@ -48,13 +48,7 @@ export default{
   }
   .text-title{
     font-size:39px;
-    margin-top:170px;
-    margin-left:40px;
-  }
-  .sita{
-    text-align:center;
-    margin:720px 90px 0 0;
-    font-size:20px;
+    margin:170px auto 0 auto;
   }
 
 }

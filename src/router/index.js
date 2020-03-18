@@ -4,6 +4,8 @@ import rootpage from '../components/rootpage'
 import userNew from '../components/userNew'
 import sessionsNew from '../components/sessionsNew'
 import postNew from '../components/postNew'
+import postIndex from '../components/postIndex'
+import postEdit from '../components/postEdit'
 
 Vue.use(Router)
 
@@ -28,6 +30,16 @@ export default new Router({
       path: '/post/new',
       name: 'postNew',
       component: postNew
+    },
+    {
+      path: '/post/index',
+      name: 'postIndex',
+      component: postIndex
+    },
+    {
+      path: '/post/update/:id',
+      name: 'postEdit',
+      component: postEdit
     }
   ]
 })

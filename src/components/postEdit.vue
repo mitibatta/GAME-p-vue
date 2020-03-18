@@ -3,9 +3,9 @@
   <div class="container">
     <div class="row">
       <div class="form_box">
-        <h1>投稿する</h1>
+        <h1>編集する</h1>
         <p class="error-text" v-show="errored">投稿に失敗しました。</p>
-      <form @submit.prevent="createPost">
+      <form @submit.prevent="updatePost">
         <div class="form-group">
           <p>画像</p>
           <input type="file" name="image" id="image" accept=".jpg, .jpeg, .gif, .png" @change="selectedImage">
@@ -18,7 +18,7 @@
           <label for="text">テキスト</label>
           <textarea rows="6" cols="18" id="text" name="text" class="form-control form-text" v-model='post.text'></textarea>
         </div>
-        <input type="submit" value="投稿" class="btn-block btn-white" v-if="post.logged_in > 0">
+        <input type="submit" value="更新" class="btn-block btn-white" v-if="post.logged_in > 0">
       </form>
       </div>
     </div>
@@ -31,9 +31,8 @@ import axios from 'axios'
 
 const hostName = 'localhost:3000'
 const path = '/api/posts'
-
 export default {
-  name: 'postNew',
+  name: 'postEdit',
   data: function () {
     return {
       post: {
@@ -43,6 +42,7 @@ export default {
         logged_in: 0
       },
       errored: false,
+      id: 0,
       res: {
         message: ''
       }
@@ -50,6 +50,8 @@ export default {
   },
   created: function () {
     this.post.logged_in = this.$localStorage.get('loginUser')
+    this.id = this.$route.params['id']
+    console.log(this.id)
   },
   methods: {
     selectedImage (e) {
@@ -64,7 +66,7 @@ export default {
       this.post.uploadVideo = files[0]
       console.log(this.post.uploadVideo)
     },
-    createPost () {
+    updatePost () {
       var formdata = new FormData()
       formdata.append('post[image]', this.post.uploadImage)
       formdata.append('post[video]', this.post.uploadVideo)
@@ -78,7 +80,7 @@ export default {
           'content-type': 'multipart/form-data'
         }
       }
-      axios.post(`http://${hostName}${path}`,
+      axios.put(`http://${hostName}${path}/${this.id}`,
         formdata, config).then((result) => {
         this.$router.push('/post/index')
         this.res = result.data
@@ -91,7 +93,6 @@ export default {
   }
 }
 </script>
-
 <style scope lang="scss">
 .user-new-wrapper{
   background-color:#ddd;
