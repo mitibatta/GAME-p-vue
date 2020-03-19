@@ -6,7 +6,7 @@ import sessionsNew from '../components/sessionsNew'
 import postNew from '../components/postNew'
 import postIndex from '../components/postIndex'
 import postEdit from '../components/postEdit'
-
+import postShow from '../components/postShow'
 Vue.use(Router)
 
 export default new Router({
@@ -40,6 +40,11 @@ export default new Router({
       path: '/post/update/:id',
       name: 'postEdit',
       component: postEdit
+    },
+    {
+      path: '/post/show/:id',
+      name: 'postShow',
+      component: postShow
     }
   ]
 })

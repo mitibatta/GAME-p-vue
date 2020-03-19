@@ -28,10 +28,10 @@ import axios from 'axios'
 
 const hostName = 'localhost:3000'
 const path = '/api/sessions'
-// const id = this.logged_in
 
 export default {
   name: 'MyHeader',
+  props: ['view'],
   data () {
     return {
       logged_in: 0,
@@ -43,6 +43,12 @@ export default {
   mounted: function () {
     this.logged_in = this.$localStorage.get('loginUser')
     console.log(this.logged_in)
+  },
+  watch: {
+    view: function () {
+      this.logged_in = this.$localStorage.get('loginUser')
+      console.log(this.logged_in)
+    }
   },
   methods: {
     signout () {

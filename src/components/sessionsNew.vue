@@ -56,6 +56,7 @@ export default {
         this.res = result.data
         this.$emit('flash', (this.res.message))
         this.$localStorage.set('loginUser', this.res.userId)
+        this.$emit('login')
         this.$router.push('/post/index')
       }).catch(error => {
         console.log(error)

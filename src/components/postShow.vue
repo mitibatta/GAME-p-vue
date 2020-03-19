@@ -1,18 +1,21 @@
 <template>
   <div class="posts-index-wrapper">
-    <div class="container" v-for="post in res.posts" :key="post.id">
-          <div class="post-parts">
-            <h2 class="user-name"><a href="#" class="text">{{ res.users.filter(e => e.id == post.user_id)[0].name }}</a></h2>
-            <img :src="res.pictures.filter(e => e.post_id == post.id)[0].image.url" v-show="res.pictures.filter(e => e.post_id == post.id)[0].image.url" width="80%" height="80%">
-            <video width="80%" height="80%" controls autobuffer="true" :src="res.pictures.filter(e => e.post_id == post.id)[0].video.url" v-show="res.pictures.filter(e => e.post_id == post.id)[0].video.url"></video>
-            <p><router-link :to="{name: 'postShow', params: {id: post.id}}" class="text"> {{post.text }}</router-link></p>
-            <div v-if="logged_in == post.user_id">
-              <ul class="user-only">
-                <li><router-link :to="{name: 'postEdit', params: {id: post.id}}">編集</router-link></li>
-                <li><a href="#" @click="postDelete(post.id)">削除</a></li>
-              </ul>
-            </div>
+    <div class="container">
+      <div class="post-parts">
+        <h2 class="user-name"><a href="#" class="text">{{ res.user }}</a></h2>
+        <img :src="res.picture.image.url" v-show="res.picture.image.url" width="80%" height="80%">
+        <video width="80%" height="80%" controls autobuffer="true" :src="res.picture.video.url" v-show="res.picture.video.url"></video>
+        <p class="text">{{ res.post.text }}</p>
+        <div v-if="logged_in == res.post.user_id">
+            <ul class="user-only">
+              <li><router-link :to="{name: 'postEdit', params: {id: res.post.id}}">編集</router-link></li>
+              <li><a href="#" @click="postDelete(res.post.id)">削除</a></li>
+            </ul>
           </div>
+          <div class="comment-t">
+          <h1 class="comment-title">コメント</h1>
+          </div>
+      </div>
     </div>
   </div>
 </template>
@@ -24,15 +27,15 @@ const hostName = 'localhost:3000'
 const path = '/api/posts'
 
 export default {
-  name: 'postIndex',
+  name: 'postShow',
   data: function () {
     return {
       logged_in: 0,
-      delete: 0,
+      id: 0,
       res: {
-        posts: [],
-        users: [],
-        pictures: []
+        post: {},
+        picture: {},
+        user: ''
       },
       response: {
         message: ''
@@ -40,31 +43,20 @@ export default {
     }
   },
   mounted: function () {
-    axios.get(`http://${hostName}${path}`).then(result => {
+    this.logged_in = this.$localStorage.get('loginUser')
+    this.id = this.$route.params['id']
+    console.log(this.id)
+    axios.get(`http://${hostName}${path}/${this.id}`).then(result => {
       this.res = result.data
       console.log(result.data)
     }).catch(error => {
       console.log(error)
     })
-    this.logged_in = this.$localStorage.get('loginUser')
-    console.log(this.logged_in)
-  },
-
-  watch: {
-    delete: function () {
-      axios.get(`http://${hostName}${path}`).then(result => {
-        this.res = result.data
-        console.log(result.data)
-      }).catch(error => {
-        console.log(error)
-      })
-    }
   },
 
   methods: {
     postDelete (id) {
       axios.delete(`http://${hostName}${path}/${id}`).then(result => {
-        this.delete += 1
         this.$router.push('/post/index')
         this.response = result.data
         this.$emit('flash', (this.response.message))
@@ -148,7 +140,6 @@ export default {
 
   .comment{
     width:460px;
-    margin:0 auto;
     h2{
       font-size:24px;
     }
@@ -161,6 +152,10 @@ export default {
     width:930px;
     margin:0 auto;
      border-bottom: 2px double #999;
+  }
+  .comment-t{
+    display: flex;
+    justify-content: space-around;
   }
 }
 

@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <flashMsg :msg="msg" v-if="show"></flashMsg>
-    <myheader @flash="emitEvent"></myheader>
-    <router-view @flash="emitEvent"/>
+    <myheader @flash="emitEvent" :view="view"></myheader>
+    <router-view @flash="emitEvent" @login="login" />
   </div>
 </template>
 
@@ -19,7 +19,8 @@ export default {
   data () {
     return {
       msg: '',
-      show: false
+      show: false,
+      view: 0
     }
   },
   methods: {
@@ -28,6 +29,9 @@ export default {
       this.show = true
       setTimeout(() => { this.show = false }
         , 3000)
+    },
+    login () {
+      this.view += 1
     }
   }
 }
