@@ -7,7 +7,7 @@
       <div v-if="logged_in > 0">
         <ul class="nav-item">
          <li><router-link to="/post/index">投稿一覧</router-link></li>
-         <li><a href="#">いいね一覧</a></li>
+         <li><router-link to="/favorite/index">いいね一覧</router-link></li>
           <li><router-link to="/post/new">投稿する</router-link></li>
          <li><a href="#" @click="signout">サインアウト</a></li>
          </ul>

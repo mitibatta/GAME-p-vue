@@ -5,11 +5,15 @@
         <h2 class="user-name"><a href="#" class="text">{{ res.user }}</a></h2>
         <img :src="res.picture.image.url" v-show="res.picture.image.url" width="80%" height="80%">
         <video width="80%" height="80%" controls autobuffer="true" :src="res.picture.video.url" v-show="res.picture.video.url"></video>
-        <p class="text">{{ res.post.text }}</p>
+        <p class="text text-body">{{ res.post.text }}</p>
+        <ul class="public">
+              <li><likebtn :post-id="res.post.id" :logged_in="logged_in" :post-fav="postFav"></likebtn></li>
+              <li></li>
+            </ul>
         <div v-if="logged_in == res.post.user_id">
             <ul class="user-only">
               <li><router-link :to="{name: 'postEdit', params: {id: res.post.id}}">編集</router-link></li>
-              <li><a href="#" @click="postDelete(res.post.id)">削除</a></li>
+              <li><deletebtn :post-id="res.post.id" @deletepost="deletePost"></deletebtn></li>
             </ul>
           </div>
           <div class="comment-t">
@@ -22,16 +26,24 @@
 
 <script>
 import axios from 'axios'
+import likebtn from './likebtn'
+import deletebtn from './deletebtn'
 
 const hostName = 'localhost:3000'
 const path = '/api/posts'
+const path1 = '/api/favorites'
 
 export default {
   name: 'postShow',
+  components: {
+    'likebtn': likebtn,
+    'deletebtn': deletebtn
+  },
   data: function () {
     return {
       logged_in: 0,
       id: 0,
+      postFav: [],
       res: {
         post: {},
         picture: {},
@@ -52,6 +64,12 @@ export default {
     }).catch(error => {
       console.log(error)
     })
+    axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
+      this.postFav = result.data
+      console.log(result.data)
+    }).catch(error => {
+      console.log(error)
+    })
   },
 
   methods: {
@@ -63,6 +81,10 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    deletePost (msg) {
+      this.response.message = msg
+      this.$emit('flash', (this.response.message))
     }
   }
 }
@@ -110,6 +132,7 @@ export default {
     justify-content:flex-end;
     li {
       margin-right: 18px;
+      font-size: 15px;
     }
   }
 
@@ -136,6 +159,9 @@ export default {
     padding-bottom:10px;
     width:930px;
     margin:0 auto;
+  }
+  .text-body{
+    font-size: 25px;
   }
 
   .comment{

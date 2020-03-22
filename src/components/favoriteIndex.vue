@@ -8,7 +8,7 @@
             <video width="80%" height="80%" controls autobuffer="true" :src="res.pictures.filter(e => e.post_id == post.id)[0].video.url" v-show="res.pictures.filter(e => e.post_id == post.id)[0].video.url"></video>
             <p class="text-body"><router-link :to="{name: 'postShow', params: {id: post.id}}" class="text"> {{post.text }}</router-link></p>
             <ul class="public">
-              <li><likebtn :post-id="post.id" :logged_in="logged_in" :post-fav="postFav" @sendURL="route"></likebtn></li>
+              <li><likebtn :post-id="post.id" :logged_in="logged_in" :post-fav="res.posts" @sendURL="route"></likebtn></li>
               <li></li>
             </ul>
             <div v-if="logged_in == post.user_id">
@@ -30,11 +30,9 @@ import likebtn from './likebtn'
 import deletebtn from './deletebtn'
 
 const hostName = 'localhost:3000'
-const path = '/api/posts'
-const path1 = '/api/favorites'
-
+const path = '/api/favorites'
 export default {
-  name: 'postIndex',
+  name: 'favoriteIndex',
   components: {
     'likebtn': likebtn,
     'deletebtn': deletebtn
@@ -42,11 +40,10 @@ export default {
   data: function () {
     return {
       logged_in: 0,
-      postFav: [],
       res: {
         posts: [],
-        users: [],
-        pictures: []
+        pictures: [],
+        users: []
       },
       response: {
         message: ''
@@ -54,36 +51,37 @@ export default {
     }
   },
   mounted: function () {
-    axios.get(`http://${hostName}${path}`).then(result => {
+    this.logged_in = this.$localStorage.get('loginUser')
+    console.log(this.logged_in)
+    axios.get(`http://${hostName}${path}`, {
+      params: {
+        id: this.logged_in
+      }
+    }).then(result => {
       this.res = result.data
       console.log(result.data)
     }).catch(error => {
       console.log(error)
     })
-    this.logged_in = this.$localStorage.get('loginUser')
-    console.log(this.logged_in)
-    axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
-      this.postFav = result.data
-      console.log(result.data)
-    }).catch(error => {
-      console.log(error)
-    })
   },
-
   methods: {
     deletePost (msg) {
-      axios.get(`http://${hostName}${path}`).then(result => {
+      axios.get(`http://${hostName}${path}`, {
+        params: {
+          id: this.logged_in
+        }
+      }).then(result => {
         this.res = result.data
         console.log(this.res)
       }).catch(error => {
         console.log(error)
       })
       this.response.message = msg
-      this.$router.push('/post/index')
+      this.$router.push('/favorite/index')
       this.$emit('flash', (this.response.message))
     },
     route () {
-      this.$router.push('/post/index')
+      this.$router.push('/favorite/index')
     }
   }
 }
