@@ -8,6 +8,7 @@ import postIndex from '../components/postIndex'
 import postEdit from '../components/postEdit'
 import postShow from '../components/postShow'
 import favoriteIndex from '../components/favoriteIndex'
+import userShow from '../components/userShow'
 Vue.use(Router)
 
 export default new Router({
@@ -51,6 +52,11 @@ export default new Router({
       path: '/favorite/index',
       name: 'favoriteIndex',
       component: favoriteIndex
+    },
+    {
+      path: '/user/show/:id',
+      name: 'userShow',
+      component: userShow
     }
   ]
 })

@@ -2,13 +2,13 @@
   <div class="posts-index-wrapper">
     <div class="container">
       <div class="post-parts">
-        <h2 class="user-name"><a href="#" class="text">{{ res.user }}</a></h2>
+        <h2 class="user-name"><router-link :to="{name: 'userShow', params: {id: res.post.user_id}}" class="text">{{res.user }}</router-link></h2>
         <img :src="res.picture.image.url" v-show="res.picture.image.url" width="80%" height="80%">
         <video width="80%" height="80%" controls autobuffer="true" :src="res.picture.video.url" v-show="res.picture.video.url"></video>
         <p class="text text-body">{{ res.post.text }}</p>
         <ul class="public">
               <li><likebtn :post-id="res.post.id" :logged_in="logged_in" :post-fav="postFav"></likebtn></li>
-              <li></li>
+              <li><img class="icon" src="../assets/image/comment.png" @click="showForm"></li>
             </ul>
         <div v-if="logged_in == res.post.user_id">
             <ul class="user-only">
@@ -16,8 +16,19 @@
               <li><deletebtn :post-id="res.post.id" @deletepost="deletePost"></deletebtn></li>
             </ul>
           </div>
+          <form @submit.prevent="postComment" v-show="form">
+            <label for="comment">コメント投稿</label>
+            <div class="comment-form">
+          <textarea rows="3" cols="12" id="comment" class="form-control form-text" v-model='comment'></textarea>
+          </div>
+          <input type="submit" value="投稿" class="btn-block btn-white" v-if="logged_in > 0">
+          </form>
           <div class="comment-t">
-          <h1 class="comment-title">コメント</h1>
+          <h1 class="comment-title">コメント一覧</h1>
+          </div>
+          <div class="comment-body" v-for="comment in rep.comments" :key="comment.id">
+            <h3><router-link :to="{name: 'userShow', params: {id: comment.user_id}}" class="text">{{ rep.users.filter(e => e.id == comment.user_id)[0].name }}</router-link></h3>
+            <p>{{ comment.text }}</p>
           </div>
       </div>
     </div>
@@ -32,6 +43,7 @@ import deletebtn from './deletebtn'
 const hostName = 'localhost:3000'
 const path = '/api/posts'
 const path1 = '/api/favorites'
+const path2 = '/api/comments'
 
 export default {
   name: 'postShow',
@@ -43,7 +55,10 @@ export default {
     return {
       logged_in: 0,
       id: 0,
+      load: 0,
       postFav: [],
+      form: false,
+      comment: '',
       res: {
         post: {},
         picture: {},
@@ -51,6 +66,10 @@ export default {
       },
       response: {
         message: ''
+      },
+      rep: {
+        comments: [],
+        users: []
       }
     }
   },
@@ -70,6 +89,22 @@ export default {
     }).catch(error => {
       console.log(error)
     })
+    axios.get(`http://${hostName}${path2}/${this.id}`).then(result => {
+      this.rep = result.data
+      console.log(result.data)
+    }).catch(error => {
+      console.log(error)
+    })
+  },
+  watch: {
+    load: function () {
+      axios.get(`http://${hostName}${path2}/${this.id}`).then(result => {
+        this.rep = result.data
+        console.log(result.data)
+      }).catch(error => {
+        console.log(error)
+      })
+    }
   },
 
   methods: {
@@ -85,6 +120,24 @@ export default {
     deletePost (msg) {
       this.response.message = msg
       this.$emit('flash', (this.response.message))
+    },
+    showForm () {
+      this.form = true
+    },
+    postComment () {
+      axios.post(`http://${hostName}${path2}`, {
+        text: this.comment,
+        post_id: this.id,
+        user_id: this.logged_in
+      }).then(result => {
+        this.$router.push(`/post/show/${this.id}`)
+        this.response = result.data
+        this.$emit('flash', (this.response.message))
+        this.comment = ''
+        this.load += 1
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }
@@ -157,31 +210,41 @@ export default {
   .comment-title{
     border-bottom: 2px solid #ddd;
     padding-bottom:10px;
-    width:930px;
+    width:99%;
     margin:0 auto;
   }
   .text-body{
     font-size: 25px;
   }
 
-  .comment{
-    width:460px;
-    h2{
-      font-size:24px;
-    }
-    p{
-      font-size:20px;
-    }
-  }
-  .border{
-    height:3px;
-    width:930px;
-    margin:0 auto;
-     border-bottom: 2px double #999;
+  .comment-body{
+    border-bottom: 2px solid #ddd;
   }
   .comment-t{
     display: flex;
     justify-content: space-around;
+  }
+
+  .form-text{
+    resize:vertical;
+    max-height:300px;
+    min-height:80px;
+    width: 45%;
+  }
+
+  .comment-form{
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .btn-block{
+    height:35px;
+    margin: 30px auto 10px auto;
+    width: 15%;
+  }
+
+  form{
+    margin-bottom:15px;
   }
 }
 

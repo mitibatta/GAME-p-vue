@@ -3,7 +3,7 @@
    <!-- <paginate name="page" :list="res.posts" :per="7"> -->
     <div class="container" v-for="post in res.posts" :key="post.id">
           <div class="post-parts">
-            <h2 class="user-name"><a href="#" class="text">{{ res.users.filter(e => e.id == post.user_id)[0].name }}</a></h2>
+            <h2 class="user-name"><router-link :to="{name: 'userShow', params: {id: post.user_id}}" class="text">{{res.users.filter(e => e.id == post.user_id)[0].name }}</router-link></h2>
             <img :src="res.pictures.filter(e => e.post_id == post.id)[0].image.url" v-show="res.pictures.filter(e => e.post_id == post.id)[0].image.url" width="80%" height="80%">
             <video width="80%" height="80%" controls autobuffer="true" :src="res.pictures.filter(e => e.post_id == post.id)[0].video.url" v-show="res.pictures.filter(e => e.post_id == post.id)[0].video.url"></video>
             <p class="text-body"><router-link :to="{name: 'postShow', params: {id: post.id}}" class="text"> {{post.text }}</router-link></p>

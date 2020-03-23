@@ -81,8 +81,4 @@ export default {
       height:40px;
       margin-top:30px;
     }
-
-button{
-  background-color:white;
-}
 </style>
