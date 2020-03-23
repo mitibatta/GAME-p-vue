@@ -26,7 +26,8 @@
 <script>
 import axios from 'axios'
 
-const hostName = 'localhost:3000'
+// const hostName = 'localhost:3000'
+const hostName = 'game-share-api.herokuapp.com'
 const path = '/api/sessions'
 
 export default {
@@ -52,7 +53,7 @@ export default {
   },
   methods: {
     signout () {
-      axios.delete(`http://${hostName}${path}/${this.logged_in}`).then((result) => {
+      axios.delete(`https://${hostName}${path}/${this.logged_in}`).then((result) => {
         this.$router.push('/')
         this.res = result.data
         this.$emit('flash', (this.res.message))

@@ -29,7 +29,8 @@ import axios from 'axios'
 import likebtn from './likebtn'
 import deletebtn from './deletebtn'
 
-const hostName = 'localhost:3000'
+// const hostName = 'localhost:3000'
+const hostName = 'game-share-api.herokuapp.com'
 const path = '/api/posts'
 const path1 = '/api/favorites'
 
@@ -55,7 +56,7 @@ export default {
     }
   },
   mounted: function () {
-    axios.get(`http://${hostName}${path}`).then(result => {
+    axios.get(`https://${hostName}${path}`).then(result => {
       this.res = result.data
       console.log(result.data)
     }).catch(error => {
@@ -63,7 +64,7 @@ export default {
     })
     this.logged_in = this.$localStorage.get('loginUser')
     console.log(this.logged_in)
-    axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
+    axios.get(`https://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
       this.postFav = result.data
       console.log(result.data)
     }).catch(error => {
@@ -73,7 +74,7 @@ export default {
 
   methods: {
     deletePost (msg) {
-      axios.get(`http://${hostName}${path}`).then(result => {
+      axios.get(`https://${hostName}${path}`).then(result => {
         this.res = result.data
         console.log(this.res)
       }).catch(error => {
@@ -85,13 +86,13 @@ export default {
     },
     route () {
       this.$router.push('/post/index')
-      axios.get(`http://${hostName}${path}`).then(result => {
+      axios.get(`https://${hostName}${path}`).then(result => {
         this.res = result.data
         console.log(result.data)
       }).catch(error => {
         console.log(error)
       })
-      axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
+      axios.get(`https://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
         this.postFav = result.data
         console.log(result.data)
       }).catch(error => {

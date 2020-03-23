@@ -34,7 +34,8 @@
 <script>
 import axios from 'axios'
 
-const hostName = 'localhost:3000'
+// const hostName = 'localhost:3000'
+const hostName = 'game-share-api.herokuapp.com'
 const path = '/api/users'
 
 export default {
@@ -55,7 +56,7 @@ export default {
   methods: {
     userCreate () {
       if (this.password === this.password_confirmation) {
-        axios.post(`http://${hostName}${path}`, {
+        axios.post(`https://${hostName}${path}`, {
           name: this.name,
           email: this.email,
           password_digest: this.password

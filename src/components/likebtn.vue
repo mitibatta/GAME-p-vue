@@ -6,7 +6,8 @@
 <script>
 import axios from 'axios'
 
-const hostName = 'localhost:3000'
+// const hostName = 'localhost:3000'
+const hostName = 'game-share-api.herokuapp.com'
 const path = '/api/favorites'
 export default {
   name: 'likebtn',
@@ -33,7 +34,7 @@ export default {
 
   methods: {
     likePost () {
-      axios.post(`http://${hostName}${path}`, {
+      axios.post(`https://${hostName}${path}`, {
         user_id: this.logged_in,
         post_id: this.postId
       }).then(result => {
@@ -46,7 +47,7 @@ export default {
       })
     },
     likeDelete () {
-      axios.delete(`http://${hostName}${path}/${this.postId}`, {
+      axios.delete(`https://${hostName}${path}/${this.postId}`, {
         data: {user_id: this.logged_in, post_id: this.postId}
       }).then(result => {
         // this.$router.push('/post/index')

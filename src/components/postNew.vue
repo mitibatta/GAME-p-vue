@@ -29,7 +29,8 @@
 <script>
 import axios from 'axios'
 
-const hostName = 'localhost:3000'
+// const hostName = 'localhost:3000'
+const hostName = 'game-share-api.herokuapp.com'
 const path = '/api/posts'
 
 export default {
@@ -78,7 +79,7 @@ export default {
           'content-type': 'multipart/form-data'
         }
       }
-      axios.post(`http://${hostName}${path}`,
+      axios.post(`https://${hostName}${path}`,
         formdata, config).then((result) => {
         this.$router.push('/post/index')
         this.res = result.data
