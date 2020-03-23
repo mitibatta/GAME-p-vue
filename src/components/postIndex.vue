@@ -85,6 +85,18 @@ export default {
     },
     route () {
       this.$router.push('/post/index')
+      axios.get(`http://${hostName}${path}`).then(result => {
+        this.res = result.data
+        console.log(result.data)
+      }).catch(error => {
+        console.log(error)
+      })
+      axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
+        this.postFav = result.data
+        console.log(result.data)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

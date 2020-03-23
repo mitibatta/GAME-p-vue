@@ -7,8 +7,8 @@
         <video width="80%" height="80%" controls autobuffer="true" :src="res.picture.video.url" v-show="res.picture.video.url"></video>
         <p class="text text-body">{{ res.post.text }}</p>
         <ul class="public">
-              <li><likebtn :post-id="res.post.id" :logged_in="logged_in" :post-fav="postFav"></likebtn></li>
-              <li><img class="icon" src="../assets/image/comment.png" @click="showForm"></li>
+              <li><likebtn :post-id="res.post.id" :logged_in="logged_in" :post-fav="postFav" @sendURL="route"></likebtn><p>{{ res.favorites.filter(e => e.post_id == res.post.id).length }}</p></li>
+              <li><img class="icon" src="../assets/image/comment.png" @click="showForm"><p>{{ rep.comments.length }}</p></li>
             </ul>
         <div v-if="logged_in == res.post.user_id">
             <ul class="user-only">
@@ -62,7 +62,8 @@ export default {
       res: {
         post: {},
         picture: {},
-        user: ''
+        user: '',
+        favorites: []
       },
       response: {
         message: ''
@@ -135,6 +136,21 @@ export default {
         this.$emit('flash', (this.response.message))
         this.comment = ''
         this.load += 1
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    route () {
+      this.$router.push(`/post/show/${this.id}`)
+      axios.get(`http://${hostName}${path}/${this.id}`).then(result => {
+        this.res = result.data
+        console.log(result.data)
+      }).catch(error => {
+        console.log(error)
+      })
+      axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
+        this.postFav = result.data
+        console.log(result.data)
       }).catch(error => {
         console.log(error)
       })

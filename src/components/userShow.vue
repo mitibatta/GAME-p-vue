@@ -10,7 +10,7 @@
             <video width="80%" height="80%" controls autobuffer="true" :src="res.pictures.filter(e => e.post_id == post.id)[0].video.url" v-show="res.pictures.filter(e => e.post_id == post.id)[0].video.url"></video>
             <p class="text-body"><router-link :to="{name: 'postShow', params: {id: post.id}}" class="text"> {{post.text }}</router-link></p>
             <ul class="public">
-              <li><likebtn :post-id="post.id" :logged_in="logged_in" :post-fav="postFav" @sendURL="route"></likebtn></li>
+              <li><likebtn :post-id="post.id" :logged_in="logged_in" :post-fav="postFav" @sendURL="route"></likebtn><p>{{ res.favorites.filter(e => e.post_id == post.id).length }}</p></li>
               <li></li>
             </ul>
             <div v-if="logged_in == post.user_id">
@@ -48,7 +48,8 @@ export default {
       res: {
         user: {},
         posts: [],
-        pictures: []
+        pictures: [],
+        favorites: []
       },
       response: {
         message: ''
@@ -87,6 +88,18 @@ export default {
     },
     route () {
       this.$router.push(`/user/show/${this.id}`)
+      axios.get(`http://${hostName}${path}/${this.id}`).then(result => {
+        this.res = result.data
+        console.log(result.data)
+      }).catch(error => {
+        console.log(error)
+      })
+      axios.get(`http://${hostName}${path1}/userIndex/${this.logged_in}`).then(result => {
+        this.postFav = result.data
+        console.log(result.data)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

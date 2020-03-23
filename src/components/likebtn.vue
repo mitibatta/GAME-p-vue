@@ -30,24 +30,7 @@ export default {
       default: ''
     }
   },
-  // mounted: function () {
-  //   axios.get(`http://${hostName}${path}/userIndex/${this.logged_in}`).then(result => {
-  //     this.post = result.data
-  //     console.log(this.post)
-  //   }).catch(error => {
-  //     console.log(error)
-  //   })
-  // },
-  watch: {
-    change: function () {
-      axios.get(`http://${hostName}${path}/userIndex/${this.logged_in}`).then(result => {
-        this.postFav = result.data
-        console.log(result.data)
-      }).catch(error => {
-        console.log(error)
-      })
-    }
-  },
+
   methods: {
     likePost () {
       axios.post(`http://${hostName}${path}`, {
@@ -55,8 +38,8 @@ export default {
         post_id: this.postId
       }).then(result => {
         // this.$router.push('/post/index')
-        this.change += 1
         this.$emit('sendURL')
+        this.change += 1
         console.log(this.postId)
       }).catch(error => {
         console.log(error)
